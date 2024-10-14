@@ -1,9 +1,7 @@
 public class Giocatore {
 
     private String nome;
-
     private boolean capitano;
-
     private int goal;
 
     public Giocatore(String nome, boolean capitano, int goal) {
@@ -53,4 +51,5 @@ public class Giocatore {
     public void setGoal(int goal){
         this.goal = goal;
     }
+
 }

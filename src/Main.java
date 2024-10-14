@@ -2,6 +2,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+        String nome;
+        boolean capitano;
+        int goal;
+
+
         Scanner in = new Scanner(System.in);
 
         System.out.println("Quanti giocatori vuoi nella tua squadra: ");
@@ -9,11 +14,11 @@ public class Main {
         Giocatore[] squadra;
         squadra = new Giocatore[n];
 
+
         int count = 0;
         boolean input = false;
 
         do {
-
             System.out.println("1- Aggiungere un giocatore alla squadra, controllando che non ci sia più di un capitano");
             System.out.println("2- Visualizzare tutti i giocatori della squadra");
             System.out.println("3- Modificare i dati di un giocatore a scelta");
@@ -27,68 +32,76 @@ public class Main {
 
             switch (scelta) {
                 case 1:
-                    for (int i = 0; i < count; i++) {
-                        System.out.println("Aggiungi il nome del giocatore: ");
-                        String nome = in.next();
-                        System.out.println("Scegli se è capitano o meno (true/false): ");
-                        boolean capitano = in.nextBoolean();
-                        System.out.println("Goal: ");
-                        int goal = in.nextInt();
-                        if(goal<0){
-                            goal=0;
-                        }
-                        AggiungiGiocatore(squadra, nome, capitano, goal, count);
+
+                    System.out.println("Aggiungi il nome del giocatore: ");
+                    nome = in.next();
+                    System.out.println("Scegli se è capitano o meno (true/false): ");
+                    capitano = in.nextBoolean();
+                    System.out.println("aggiungi il numero di goal: ");
+                    goal = in.nextInt();
+                    if (goal < 0) {
+                        goal = 0;
                     }
-                    count++;
+                    AggiungiGiocatore(squadra, nome, capitano, goal, count);
+                    count = count + 1;
                     break;
+
+
                 case 2:
-                    VisualizzaRosa(squadra,count);
+                    VisualizzaRosa(squadra, count);
                     break;
+
+
                 case 3:
-                    System.out.println("Modifica dei dati di un giocatore, inserisci il nome da sostituire: ");
-                    String nome = in.next();
-                    System.out.println("Inserisci se è capitano o meno (true/false): ");
-                    String capitano = in.next();
-                    System.out.println("Ora cambia i goal: ");
-                    String goal = in.next();
-                    System.out.println("Ora puoi modificare il nome del giocatore: ");
+                    System.out.println("Di quale giocatore vuoi cambiare i dati?: ");
+                    nome = in.next();
+                    System.out.println("Modifica il nome:");
                     String newnome = in.next();
-                    System.out.println("Cambia se è capitano o meno (true/false): ");
-                    String newcapitano = in.next();
-                    System.out.println("Inserisci il prezzo da sostituire: ");
-                    String newgoal = in.next();
-                    ModificaGiocatore(Giocatore[] squadra,nome,capitano,goal,newnome,newcapitano,newgoal);
+                    System.out.println("Decidi se è capitano (true/false):");
+                    boolean newcapitano = in.nextBoolean();
+                    System.out.println("Modifica il numero di goal:");
+                    int newgoal = in.nextInt();
+                    ModificaGiocatore(squadra, nome, newnome, newcapitano, newgoal, count);
                     break;
+
+
                 case 4:
-                    if (count==0){
+                    if (count == 0) {
                         System.out.println("Non ci sono auto nel concessionario, inseriscine una");
                         break;
                     }
-                    int RicercaDaEliminare=-1;
+                    int RicercaDaEliminare = -1;
                     System.out.println("Inserisci il nome del giocatore da eliminare: ");
                     nome = in.next();
-                    System.out.println("Ora inserisci se è capitano o meno (true/false): ");
-                    capitano = in.next();
-                    System.out.println("Ora inserisci i goal: ");
-                    goal = in.next();
 
-                    for (int i = 0; i < count; i++){
-                        if (arrayMarca[i].equalsIgnoreCase(marca) && arrayModello[i].equalsIgnoreCase(modello) && arrayPrezzo[i].equalsIgnoreCase(prezzo)){
-                            RicercaDaEliminare=i;
-                            break;
+                    for (int i = 0; i < count; i++) {
+                        if (nome.equalsIgnoreCase(String.valueOf(squadra[i].getNome()))) {
+                            RicercaDaEliminare = i;
                         }
                     }
-                    if (RicercaDaEliminare==-1){
-                        System.out.println("Non è presente un'auto con questi dati");
-                    }
-                    count = EliminaGiocatore(squadra,RicercaDaEliminare,count);
+
+                    count = EliminaGiocatore(squadra, RicercaDaEliminare, count);
+
+                case 5:
+                    visualizzaVgoal(squadra, count);
+
+
+                case 6:
+                    visualizzacapitano(squadra, count);
+
                 case 0:
                     input = true;
                     System.out.println("Programma terminato");
                     break;
             }
+
+
         }while (!input);
     }
+
+
+
+
 
     public static void AggiungiGiocatore(Giocatore[] squadra, String nome, boolean capitano, int goal, int count){
         squadra[count] = new Giocatore(nome, capitano, goal);
@@ -98,6 +111,8 @@ public class Main {
             System.out.println("Giocatore: " + squadra[i].getNome() + " Capitano:" + squadra[i].getCapitano() + " Goal:" + squadra[i].getGoal());
         }
     }
+
+
     public static int VisualizzaCapitano(String[]arrayMarca,String[]arrayModello, String marca, String modello){
         int posizione = -1;
         for (int i = 0; i < arrayMarca.length; i++){
@@ -107,6 +122,7 @@ public class Main {
         }
         return posizione;
     }
+
     public static int EliminaGiocatore(Giocatore[] squadra, int ricercadaeliminare, int count){
         for (int i = ricercadaeliminare; i < count; i++){
             squadra[i] = squadra[i+1];
@@ -116,17 +132,34 @@ public class Main {
         count = count-1;
         return count;
     }
-    public static void ModificaGiocatore(Giocatore[] squadra, String nome, String capitano, String goal, String newnome, String newcapitano, String newgoal){
-        for (int i = 0; i < squadra.length; i++){
-            if(nome.equalsIgnoreCase(String.valueOf(squadra[i]))){
-                squadra[i]=newnome;
-            }
-            if(capitano.equalsIgnoreCase(String.valueOf(squadra[i]))){
-                squadra[i]=newcapitano;
-            }
-            if(goal.equalsIgnoreCase(String.valueOf(squadra[i]))){
-                squadra[i]=newgoal;
+
+    public static void ModificaGiocatore(Giocatore[] squadra, String nome, String newnome, boolean newcapitano, int newgoal, int count){
+        for (int i = 0; i < count; i++){
+            if(nome.equalsIgnoreCase(squadra[i].getNome())){
+                squadra[i].setNome(newnome);
+
+                squadra[i].setCapitano(newcapitano);
+
+                squadra[i].setGoal(newgoal);
             }
         }
     }
+
+    public static void visualizzaVgoal(Giocatore[] squadra, int count) {
+        for (int i = 0; i < count; i++) {
+            if (squadra[i].getGoal() >= 5) {
+                System.out.println(squadra[i].getNome() + "con:" + squadra[i].getGoal() + "goal");
+            }
+        }
+    }
+
+    public static void visualizzacapitano(Giocatore[] squadra, int count) {
+        for (int i = 0; i < count; i++) {
+            if (squadra[i].getCapitano() == true) {
+                System.out.println("il capitano è: " + squadra[i].getNome() );
+            }
+        }
+    }
+
+
 }
